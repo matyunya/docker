@@ -17,11 +17,9 @@ RUN buildDeps=" \
         libkrb5-dev \
         libldap2-dev \
         libmcrypt-dev \
-        libmemcached-dev \
         libpng12-dev \
         libpq-dev \
         libpspell-dev \
-        librabbitmq-dev \
         libsasl2-dev \
         libsnmp-dev \
         libssl-dev \
@@ -30,6 +28,9 @@ RUN buildDeps=" \
         libxpm-dev \
         libxslt1-dev \
         zlib1g-dev \
+        git \
+        zip \
+        php5-pgsql \
     " \
     && phpModules=" \
         bcmath bz2 calendar dba enchant exif ftp gd gettext gmp imap intl ldap mbstring mcrypt mssql mysql mysqli opcache pcntl pdo pdo_dblib pdo_mysql pdo_pgsql pgsql pspell shmop snmp soap sockets sysvmsg sysvsem sysvshm tidy wddx xmlrpc xsl zip xdebug \
