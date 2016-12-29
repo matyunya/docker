@@ -11,6 +11,7 @@ RUN buildDeps=" \
         libc-client-dev \
         libenchant-dev \
         libfreetype6-dev \
+        libedit-dev \
         libgmp3-dev \
         libicu-dev \
         libjpeg62-turbo-dev \
@@ -29,11 +30,9 @@ RUN buildDeps=" \
         libxslt1-dev \
         zlib1g-dev \
         php5-pgsql \
-        git \
-        zip \
     " \
     && phpModules=" \
-        curl gearman json memcache mysqli mysqlnd pdo pdo_pgsql readline xsl gd imagick mcrypt mongo mysql opcache pdo_mysql pgsql timezonedb \
+        json mysqli pdo pdo_pgsql readline xsl gd mcrypt mysql opcache pdo_mysql pgsql \
     " \
     && echo "deb http://httpredir.debian.org/debian jessie contrib non-free" > /etc/apt/sources.list.d/additional.list \
     && apt-get update && apt-get install --yes --force-yes libmcrypt4 libmemcachedutil2 libpng12-0 libpq5  --no-install-recommends \
@@ -45,6 +44,7 @@ RUN buildDeps=" \
     && docker-php-ext-install $phpModules \
     && printf "\n" | pecl install memcache \
     && printf "\n" | pecl install memcached \
+    && printf "\n" | pecl install timezonedb \
     && for ext in $phpModules; do \
            rm -f /usr/local/etc/php/conf.d/docker-php-ext-$ext.ini; \
        done \
@@ -55,6 +55,7 @@ COPY php.ini /usr/local/etc/php/
 
 # Install additional packages
 RUN apt-get update && apt-get install -y git msmtp-mta openssh-client --no-install-recommends && rm -r /var/lib/apt/lists/*
+RUN apt-get install -y git zip
 
 # Install composer and put binary into $PATH
 RUN curl -sS https://getcomposer.org/installer | php \
@@ -67,6 +68,8 @@ RUN curl -sSLo phpunit.phar https://phar.phpunit.de/phpunit.phar \
     && mv phpunit.phar /usr/local/bin/ \
     && ln -s /usr/local/bin/phpunit.phar /usr/local/bin/phpunit
 
+
+# todo gearman and node
 # Install Node.js
 #RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
 # && apt-get install -y nodejs build-essential
