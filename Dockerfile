@@ -53,9 +53,14 @@ RUN buildDeps=" \
 
 COPY php.ini /usr/local/etc/php/
 
+
 # Install additional packages
-RUN apt-get update && apt-get install -y git msmtp-mta openssh-client --no-install-recommends && rm -r /var/lib/apt/lists/*
-RUN apt-get install -y git zip
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+ && apt-get install -y nodejs build-essential
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get install yarn
+RUN apt-get update && apt-get install -y git msmtp-mta openssh-client zip rsync && rm -r /var/lib/apt/lists/*
 
 # Install composer and put binary into $PATH
 RUN curl -sS https://getcomposer.org/installer | php \
@@ -68,10 +73,6 @@ RUN curl -sSLo phpunit.phar https://phar.phpunit.de/phpunit.phar \
     && mv phpunit.phar /usr/local/bin/ \
     && ln -s /usr/local/bin/phpunit.phar /usr/local/bin/phpunit
 
-
-# todo gearman and node
-# Install Node.js
-#RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-# && apt-get install -y nodejs build-essential
+# todo gearman
 
 COPY msmtprc /etc/
